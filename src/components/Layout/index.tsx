@@ -1,59 +1,88 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import {
   LaptopOutlined,
   NotificationOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
+import Image from 'next/image'
 import { Breadcrumb, Layout as AntdLayout, Menu, theme } from 'antd'
+
+import styles from './index.module.scss'
 
 const { Header, Content, Sider } = AntdLayout
 
-const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}))
+const ITEMS = [
+  {
+    // icon: React.createElement(icon),
+    label: `图书管理`,
+    key: 'book',
 
-const items2: MenuProps['items'] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-].map((icon, index) => {
-  const key = String(index + 1)
+    children: [
+      { label: `图书列表`, key: '/book' },
+      { label: `图书添加`, key: '/book/add' },
+    ],
+  },
+  {
+    // icon: React.createElement(icon),
+    label: `借阅管理`,
+    key: 'borrow',
 
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-    children: Array.from({ length: 4 }).map((_, j) => {
-      const subKey = index * 4 + j + 1
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      }
-    }),
-  }
-})
+    children: [
+      { label: `借阅列表`, key: '/borrow' },
+      { label: `借阅添加`, key: '/borrow/add' },
+    ],
+  },
+  {
+    // icon: React.createElement(icon),
+    label: `分类管理`,
+    key: 'category',
+
+    children: [
+      { label: `分类列表`, key: '/category' },
+      { label: `分类添加`, key: '/category/add' },
+    ],
+  },
+  {
+    // icon: React.createElement(icon),
+    label: `用户管理`,
+    key: 'user',
+
+    children: [
+      { label: `用户列表`, key: '/user' },
+      { label: `用户添加`, key: '/user/add' },
+    ],
+  },
+]
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken()
+  const router = useRouter()
+  const handleMenuClick = ({ key }: { key: string }) => {
+    router.push(key)
+  }
 
   return (
     <AntdLayout style={{ minHeight: '100vh' }}>
-      <Header style={{ display: 'flex', alignItems: 'center' }}>
-        <div className='demo-logo' />
+      <Header className={styles.header}>
+        <Image
+          src='/logo.svg'
+          alt='logo'
+          width={27}
+          height={27}
+          className={styles.logo}
+        />
         多云图书管理系统
       </Header>
       <AntdLayout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
+        <Sider width={200}>
           <Menu
             mode='inline'
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
+            defaultSelectedKeys={['/book']}
+            defaultOpenKeys={['book']}
             style={{ height: '100%', borderRight: 0 }}
-            items={items2}
+            items={ITEMS}
+            onClick={handleMenuClick}
           />
         </Sider>
         <AntdLayout style={{ padding: '0 24px 24px' }}>
@@ -61,14 +90,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
             style={{ margin: '16px 0' }}
           />
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}>
+          <Content>
             Content
             {children}
           </Content>
