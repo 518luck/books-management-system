@@ -14,3 +14,16 @@
     font-size: 16px;
   }
 }
+.oneAntdLayout {
+  min-height: 100vh;
+  .sectionInner {
+    .sectionContent {
+      padding: 32px;
+      .content {
+        background-color: #fff;
+        border-radius: 16px;
+        padding: 24px;
+      }
+    }
+  }
+}
