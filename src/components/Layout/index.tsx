@@ -5,9 +5,10 @@ import {
   NotificationOutlined,
   UserOutlined,
 } from '@ant-design/icons'
-import type { MenuProps } from 'antd'
 import Image from 'next/image'
-import { Breadcrumb, Layout as AntdLayout, Menu, theme } from 'antd'
+import { DownOutlined } from '@ant-design/icons'
+import { Breadcrumb, Layout as AntdLayout, Menu, Dropdown, Space } from 'antd'
+import type { MenuProps } from 'antd'
 
 import styles from './index.module.scss'
 
@@ -56,6 +57,20 @@ const ITEMS = [
   },
 ]
 
+const USER_ITEMS: MenuProps['items'] = [
+  {
+    label: '用户中心',
+    key: '1',
+  },
+  {
+    type: 'divider',
+  },
+  {
+    label: '登出',
+    key: '2',
+  },
+]
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const handleMenuClick = ({ key }: { key: string }) => {
@@ -73,6 +88,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
           className={styles.logo}
         />
         多云图书管理系统
+        <span className={styles.user}>
+          <Dropdown menu={{ items: USER_ITEMS }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                用户名
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
+        </span>
       </Header>
       <AntdLayout>
         <Sider width={200}>
